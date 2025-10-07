@@ -9,8 +9,8 @@ const char* ssid = "ESP32_Test";
 const char* password = "12345678";
 
 // Configuration Supabase
-const char* supabaseUrl = "https://ixwlwdortlfktwzorxzm.supabase.co";
-const char* supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml4d2x3ZG9ydGxma3R3em9yeHptIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE0NTg1NTAsImV4cCI6MjA2NzAzNDU1MH0.AlPvT60fL_7ydB-PzjU04KEAdMM6QW-Amn5KQKvZFx4";
+const char* supabaseUrl = "******************";
+const char* supabaseKey = "*********************************";
 const char* tableName = "sensor_data";
 
 // Configuration des pins
