@@ -1,0 +1,44 @@
+-- Création de la table pour stocker les données du capteur DHT22
+CREATE TABLE sensor_data (
+    id BIGSERIAL PRIMARY KEY,
+    temperature DECIMAL(5,2) NOT NULL,
+    humidity DECIMAL(5,2) NOT NULL,
+    alert_status BOOLEAN NOT NULL DEFAULT FALSE,
+    temperature_alert BOOLEAN NOT NULL DEFAULT FALSE,
+    humidity_alert BOOLEAN NOT NULL DEFAULT FALSE,
+    device_id VARCHAR(50) DEFAULT 'ESP32_DHT22',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Création d'un index pour optimiser les requêtes par date
+CREATE INDEX idx_sensor_data_created_at ON sensor_data(created_at);
+
+-- Création d'un index pour optimiser les requêtes par device_id
+CREATE INDEX idx_sensor_data_device_id ON sensor_data(device_id);
+
+-- Politique RLS (Row Level Security) - optionnel
+-- Décommentez ces lignes si vous voulez activer la sécurité au niveau des lignes
+-- ALTER TABLE sensor_data ENABLE ROW LEVEL SECURITY;
+
+-- Politique pour permettre la lecture à tous les utilisateurs authentifiés
+-- CREATE POLICY "Allow authenticated read access" ON sensor_data
+--     FOR SELECT TO authenticated USING (true);
+
+-- Politique pour permettre l'insertion à tous les utilisateurs authentifiés
+-- CREATE POLICY "Allow authenticated insert access" ON sensor_data
+--     FOR INSERT TO authenticated WITH CHECK (true);
+
+-- Vue pour obtenir les dernières données (optionnel)
+CREATE VIEW latest_sensor_data AS
+SELECT 
+    id,
+    temperature,
+    humidity,
+    alert_status,
+    temperature_alert,
+    humidity_alert,
+    device_id,
+    created_at
+FROM sensor_data 
+ORDER BY created_at DESC 
+LIMIT 100;

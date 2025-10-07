@@ -1,0 +1,49 @@
+ -- Activation de RLS sur la table sensor_data
+ALTER TABLE sensor_data ENABLE ROW LEVEL SECURITY;
+
+-- Politique pour permettre l'insertion (CREATE) - nécessaire pour votre ESP32
+CREATE POLICY "Autoriser insertion des données capteur" ON sensor_data
+    FOR INSERT 
+    TO anon 
+    WITH CHECK (true);
+
+-- Politique pour permettre la lecture (SELECT) - utile pour consulter les données
+CREATE POLICY "Autoriser lecture des données capteur" ON sensor_data
+    FOR SELECT 
+    TO anon 
+    USING (true);
+
+-- Optionnel : Politique pour permettre la mise à jour (UPDATE)
+CREATE POLICY "Autoriser modification des données capteur" ON sensor_data
+    FOR UPDATE 
+    TO anon 
+    USING (true)
+    WITH CHECK (true);
+
+-- Optionnel : Politique pour permettre la suppression (DELETE)
+CREATE POLICY "Autoriser suppression des données capteur" ON sensor_data
+    FOR DELETE 
+    TO anon 
+    USING (true);
+
+-- Vérification des politiques créées
+SELECT schemaname, tablename, policyname, cmd, roles, qual, with_check
+FROM pg_policies 
+WHERE tablename = 'sensor_data';
+
+-- Alternative plus restrictive (recommandée) :
+-- Si vous voulez limiter l'accès par device_id
+/*
+DROP POLICY IF EXISTS "Autoriser insertion des données capteur" ON sensor_data;
+DROP POLICY IF EXISTS "Autoriser lecture des données capteur" ON sensor_data;
+
+CREATE POLICY "Autoriser insertion ESP32" ON sensor_data
+    FOR INSERT 
+    TO anon 
+    WITH CHECK (device_id = 'ESP32_DHT22');
+
+CREATE POLICY "Autoriser lecture ESP32" ON sensor_data
+    FOR SELECT 
+    TO anon 
+    USING (device_id = 'ESP32_DHT22');
+*/
